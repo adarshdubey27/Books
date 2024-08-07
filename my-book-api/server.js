@@ -191,8 +191,18 @@ app.get('/api/book', (req, res) => {
     }
 });
 
+// Serve index.html for all other routes in production
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, 'public')));
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+    });
+}
+
 
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
+
+module.exports = app;
